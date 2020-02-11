@@ -16,6 +16,8 @@ export const useAuth = () => {
   }, []);
 
   const logOut = useCallback(() => {
+    setToken(null)
+    setUserId(null)
     localStorage.clear(storageName);
   }, []);
   useEffect(() => {

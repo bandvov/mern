@@ -9,6 +9,7 @@ const AuthPage = () => {
   const { loading, request, error, clearError } = useHttp();
   const message = useMessage();
 
+  const { token, userId, login, logOut } = useContext(Context);
 
   useEffect(() => {
     message(error);
@@ -18,13 +19,21 @@ const AuthPage = () => {
   const changeHandler = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const requestHandler = async () => {
+
+  const registerHandler = async () => {
     try {
       const data = await request("/api/register", "POST", { ...form });
       message(data.message);
+     } catch (e) {}
+  };
+
+  const loginHandler = async () => {
+    try {
+      const data = await request("/api/login", "POST", { ...form });
+      console.log(data.token,data.userId);      
+      login(data.token, data.userId);
     } catch (e) {}
   };
-  
   return (
     <div className="row">
       <div className="col s6 offset-s3">
@@ -52,14 +61,14 @@ const AuthPage = () => {
                 value="login"
                 style={{ marginRight: "1rem" }}
                 disabled={loading}
-             
+                onClick={loginHandler}
               />
               <input
                 className="btn orange"
                 type="button"
                 value="register"
                 disabled={loading}
-                onClick={requestHandler}
+                onClick={registerHandler}
               />
             </div>
           </div>
